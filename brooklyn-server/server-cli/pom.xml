@@ -104,6 +104,11 @@
             <classifier>tests</classifier>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-daemon</artifactId>
+            <version>1.0.9</version>
+        </dependency>
     </dependencies>
 
     <build>

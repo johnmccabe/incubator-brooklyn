@@ -87,6 +87,9 @@ import org.apache.brooklyn.util.text.Identifiers;
 import org.apache.brooklyn.util.text.StringEscapes.JavaStringEscapes;
 import org.apache.brooklyn.util.text.Strings;
 import org.apache.brooklyn.util.time.Duration;
+import org.apache.commons.daemon.Daemon;
+import org.apache.commons.daemon.DaemonContext;
+import org.apache.commons.daemon.DaemonInitException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -111,9 +114,33 @@ import com.google.common.collect.Iterables;
  *      (typically calling the parent and then customizing the builder)
  * <li> populating a custom catalog using {@link LaunchCommand#populateCatalog(BrooklynCatalog)}
  */
-public class Main extends AbstractMain {
+public class Main extends AbstractMain implements Daemon {
 
     private static final Logger log = LoggerFactory.getLogger(Main.class);
+    private static String[] daemonArgs;
+
+
+    @Override
+    public void init(DaemonContext dc) throws DaemonInitException, Exception {
+        System.out.println("initializing ...");
+        daemonArgs = dc.getArguments();
+    }
+
+    @Override
+    public void start() throws Exception {
+        System.out.println("starting ...");
+        main(daemonArgs);
+    }
+
+    @Override
+    public void stop() throws Exception {
+        System.out.println("stopping ...");
+    }
+
+    @Override
+    public void destroy() {
+        System.out.println("done.");
+    }
 
     public static void main(String... args) {
         log.debug("Launching Brooklyn via CLI, with "+Arrays.toString(args));
